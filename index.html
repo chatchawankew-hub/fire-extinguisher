@@ -27,10 +27,8 @@ if (!id) {
   throw new Error("missing id");
 }
 
-/* ✅ STEP สำคัญ: ระบุ field ที่อยากให้โชว์เท่านั้น */
 const allowedFields = [
   "หมายเลขถัง",
-  "id ถังดับเพลิง",
   "Zone",
   "พื้นที่",
   "ชนิด ",
@@ -43,19 +41,20 @@ fetch("./fire_extinguisher_data.json")
   .then(res => res.json())
   .then(data => {
 
-    const record = data.find(r => r["id ถังดับเพลิง"] == id);
+    const record = data[id]; // ✅ จุดแก้จริง
+
     if (!record) {
       output.textContent = "ไม่พบข้อมูล";
       return;
     }
 
-    let html = "<table border='1' cellpadding='10' cellspacing='0'>";
+    let html = "<table cellpadding='10' cellspacing='0'>";
 
     allowedFields.forEach(key => {
-      if (record[key] && record[key] !== "") {
+      if (record[key] !== undefined && record[key] !== "") {
         html += `
           <tr>
-            <td><strong>${key}</strong></td>
+            <td class="label">${key}</td>
             <td>${record[key]}</td>
           </tr>
         `;
@@ -65,10 +64,12 @@ fetch("./fire_extinguisher_data.json")
     html += "</table>";
     output.innerHTML = html;
   })
-  .catch(() => {
+  .catch(err => {
     output.textContent = "โหลดข้อมูลไม่สำเร็จ";
+    console.error(err);
   });
 </script>
+
 
 
 </body>
