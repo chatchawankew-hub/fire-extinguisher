@@ -67,7 +67,10 @@ fetch("https://script.google.com/macros/s/AKfycbx4soWKAkMf-_tWObteLy4hSt89sBxGTv
   .then(res => res.json())
   .then(data => {
 
-    const record = data.find(item => item.id === id);
+    const record = data.find(item =>
+  String(item.id).trim() === String(id).trim()
+);
+
 
     if (!record) {
       output.textContent = "ไม่พบข้อมูล";
