@@ -12,25 +12,25 @@
     .label { background: #f5f5f5; font-weight: bold; width: 40%; }
 
     .header {
-  display: flex;
+  display: flex;            /* ใช้ Flexbox จัดเรียงโลโก้กับข้อความ*/
   justify-content: center;   /* จัดกึ่งกลางแนวนอน */
   align-items: center;       /* จัดกึ่งกลางแนวตั้ง */
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 12px;                /* ระยะห่างระหว่างโลโก้กับข้อความ */
+  margin-bottom: 10px;      /* เว้นระยะด้านล่างของ header  */
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   background-color: #000;   /* พื้นหลังดำ */
-  padding: 12px 20px;
+  padding: 12px 20px;      /* ระยะขอบด้านใน (บน-ล่าง 12px / ซ้าย-ขวา 20px)  */
 }
 
 .header h2 {
   color: #fff;              /* ตัวอักษรขาว */
-  margin: 0;
+  margin: 0;                /* เอา margin เริ่มต้นของ h2 ออก */
 }
 
 .logo {
   height: 75px;   /* ปรับขนาดโลโก้ */
-  padding: 4px;
-  border-radius: 4px;
+  padding: 4px;   /* เว้นขอบด้านในรอบโลโก้ */
+  border-radius: 4px;  /* ทำมุมพื้นหลังโลโก้ให้โค้งมนเล็กน้อย */
 }
 
   </style>
