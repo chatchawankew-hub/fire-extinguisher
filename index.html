@@ -33,7 +33,7 @@ if (!id) {
 // ============================
 // STEP 3.2 โหลดไฟล์ JSON
 // ============================
-fetch("data.json")
+fetch("./fire_extinguisher_data.json")
   .then(res => res.json())
   .then(db => {
     const data = db[id];
