@@ -54,20 +54,20 @@ if (!id) {
 }
 
 const allowedFields = [
-  "หมายเลขถัง",
-  "Zone",
-  "พื้นที่",
-  "ชนิด ",
-  "น้ำหนัก",
-  "ยี่ห้อ",
-  "ปีที่ผลิต / ติดตั้ง / Hydro test ล่าสุด"
+  { label: "หมายเลขถัง", key: "tank_no" },
+  { label: "Zone", key: "zone" },
+  { label: "พื้นที่", key: "area" },
+  { label: "ชนิด", key: "type" },
+  { label: "น้ำหนัก", key: "weight" },
+  { label: "ยี่ห้อ", key: "brand" },
+  { label: "ปีที่ผลิต / ติดตั้ง / Hydro test ล่าสุด", key: "date_info" }
 ];
 
 fetch("https://script.google.com/macros/s/AKfycbx4soWKAkMf-_tWObteLy4hSt89sBxGTvIxMQ9xeMA_mP5sBmEzqHa67qc32q2tWsuu/exec")
   .then(res => res.json())
   .then(data => {
 
-    const record = data[id]; // ✅ จุดแก้จริง
+    const record = data.find(item => item.id === id);
 
     if (!record) {
       output.textContent = "ไม่พบข้อมูล";
@@ -76,12 +76,12 @@ fetch("https://script.google.com/macros/s/AKfycbx4soWKAkMf-_tWObteLy4hSt89sBxGTv
 
     let html = "<table cellpadding='10' cellspacing='0'>";
 
-    allowedFields.forEach(key => {
-      if (record[key] !== undefined && record[key] !== "") {
+    allowedFields.forEach(f => {
+      if (record[f.key] !== undefined && record[f.key] !== "") {
         html += `
           <tr>
-            <td class="label">${key}</td>
-            <td>${record[key]}</td>
+            <td class="label">${f.label}</td>
+            <td>${record[f.key]}</td>
           </tr>
         `;
       }
@@ -95,6 +95,7 @@ fetch("https://script.google.com/macros/s/AKfycbx4soWKAkMf-_tWObteLy4hSt89sBxGTv
     console.error(err);
   });
 </script>
+
 
 
 
