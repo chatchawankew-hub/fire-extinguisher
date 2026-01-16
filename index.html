@@ -10,19 +10,53 @@
   <div id="output">กำลังโหลด...</div>
 
   <script>
-    // STEP 1.1 อ่านค่า id จาก URL
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+  // =================================
+  // STEP 2.2.1 อ่านค่า id จาก URL
+  // =================================
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-    // STEP 1.2 แสดงผล
-    const output = document.getElementById("output");
+  const output = document.getElementById("output");
 
-    if (id) {
-      output.textContent = "ID ที่ได้รับ: " + id;
-    } else {
-      output.textContent = "ไม่พบ id";
-    }
-  </script>
+  if (!id) {
+    output.textContent = "ไม่พบ id";
+    throw new Error("missing id");
+  }
+
+  // =================================
+  // STEP 2.2.2 ตั้งค่า URL ของ Apps Script
+  // =================================
+  // 👉 แก้เฉพาะ URL ตรงนี้
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbyCvlDZDdd7xw91ehE-LtpL9coVUHa8qg7Q2nMoHzYpn9V5q-XynwTVnklP4nEhNBWS/exec" + "?id=" + id;
+
+  // =================================
+  // STEP 2.2.3 เรียกข้อมูลจาก API
+  // =================================
+  fetch(API_URL)
+    .then(res => res.json()) // แปลงเป็น JSON
+    .then(data => {
+
+      // ถ้า API ตอบ error กลับมา
+      if (data.error) {
+        output.textContent = "ไม่พบข้อมูล";
+        return;
+      }
+
+      // แสดงข้อมูลทั้งหมดแบบง่ายที่สุด
+      let text = "";
+      for (const key in data) {
+        text += key + " : " + data[key] + "\n";
+      }
+
+      output.textContent = text;
+    })
+    .catch(err => {
+      output.textContent = "โหลดข้อมูลไม่สำเร็จ";
+      console.error(err);
+    });
+</script>
+
 
 </body>
 </html>
