@@ -18,46 +18,58 @@
 <div id="output">กำลังโหลด...</div>
 
 <script>
-// ============================
-// STEP 3.1 อ่าน id จาก URL
-// ============================
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const output = document.getElementById("output");
 
 if (!id) {
-  output.innerHTML = "ไม่พบ id";
+  output.textContent = "ไม่พบ id";
   throw new Error("missing id");
 }
 
-// ============================
-// STEP 3.2 โหลดไฟล์ JSON
-// ============================
+/* ✅ STEP สำคัญ: ระบุ field ที่อยากให้โชว์เท่านั้น */
+const allowedFields = [
+  "หมายเลขถัง",
+  "id ถังดับเพลิง",
+  "Zone",
+  "พื้นที่",
+  "ชนิด ",
+  "น้ำหนัก",
+  "ยี่ห้อ",
+  "ปีที่ผลิต / ติดตั้ง / Hydro test ล่าสุด"
+];
+
 fetch("./fire_extinguisher_data.json")
   .then(res => res.json())
-  .then(db => {
-    const data = db[id];
-    if (!data) {
-      output.innerHTML = "ไม่พบข้อมูล";
+  .then(data => {
+
+    const record = data.find(r => r["id ถังดับเพลิง"] == id);
+    if (!record) {
+      output.textContent = "ไม่พบข้อมูล";
       return;
     }
 
-    let html = "<table>";
-    for (const key in data) {
-      html += `
-        <tr>
-          <td class="label">${key}</td>
-          <td>${data[key]}</td>
-        </tr>
-      `;
-    }
+    let html = "<table border='1' cellpadding='10' cellspacing='0'>";
+
+    allowedFields.forEach(key => {
+      if (record[key] && record[key] !== "") {
+        html += `
+          <tr>
+            <td><strong>${key}</strong></td>
+            <td>${record[key]}</td>
+          </tr>
+        `;
+      }
+    });
+
     html += "</table>";
     output.innerHTML = html;
   })
   .catch(() => {
-    output.innerHTML = "โหลดข้อมูลไม่สำเร็จ";
+    output.textContent = "โหลดข้อมูลไม่สำเร็จ";
   });
 </script>
+
 
 </body>
 </html>
