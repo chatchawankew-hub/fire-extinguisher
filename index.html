@@ -4,76 +4,60 @@
   <meta charset="UTF-8">
   <title>ทะเบียนถังดับเพลิง</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 16px; }
+    h2 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; }
+    td { border: 1px solid #999; padding: 10px; }
+    .label { background: #f5f5f5; font-weight: bold; width: 40%; }
+  </style>
 </head>
 <body>
 
-  <div id="output">กำลังโหลด...</div>
+<h2>ทะเบียนถังดับเพลิง</h2>
+<div id="output">กำลังโหลด...</div>
 
-  <script>
-  // ================================
-  // STEP 3.1 อ่าน id จาก URL
-  // ================================
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-  const output = document.getElementById("output");
+<script>
+// ============================
+// STEP 3.1 อ่าน id จาก URL
+// ============================
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+const output = document.getElementById("output");
 
-  if (!id) {
-    output.textContent = "ไม่พบ id";
-    throw new Error("missing id");
-  }
+if (!id) {
+  output.innerHTML = "ไม่พบ id";
+  throw new Error("missing id");
+}
 
-  // ================================
-  // STEP 3.2 URL Apps Script
-  // ================================
-  const API_URL =
-    "https://script.google.com/macros/s/AKfycbxlnE9Yi5MRz2xnZiXZQdmPXR1u-HD7lterkTVqKF9ujxFQYSfLx30Km69i_b4KCNKM/exec?id=" + id;
+// ============================
+// STEP 3.2 โหลดไฟล์ JSON
+// ============================
+fetch("data.json")
+  .then(res => res.json())
+  .then(db => {
+    const data = db[id];
+    if (!data) {
+      output.innerHTML = "ไม่พบข้อมูล";
+      return;
+    }
 
-  // ================================
-  // STEP 3.3 field ที่ต้องการแสดง
-  // ================================
-  const allowedFields = [
-    "หมายเลขถัง",
-    "id ถังดับเพลิง",
-    "Zone",
-    "พื้นที่",
-    "ชนิด ",
-    "น้ำหนัก",
-    "ยี่ห้อ",
-    "ปีที่ผลิต / ติดตั้ง / Hydro test ล่าสุด"
-  ];
-
-  // ================================
-  // STEP 3.4 เรียก API (อ่านเป็น text)
-  // ================================
-  fetch(API_URL)
-    .then(res => res.text()) // 👈 สำคัญมาก
-    .then(text => {
-      const data = JSON.parse(text); // แปลงเอง
-
-      let html = "<table border='1' cellpadding='8' cellspacing='0'>";
-
-      allowedFields.forEach(key => {
-        if (data[key] !== undefined && data[key] !== "") {
-          html += `
-            <tr>
-              <td><strong>${key}</strong></td>
-              <td>${data[key]}</td>
-            </tr>
-          `;
-        }
-      });
-
-      html += "</table>";
-      output.innerHTML = html;
-    })
-    .catch(err => {
-      output.textContent = "โหลดข้อมูลไม่สำเร็จ";
-      console.error(err);
-    });
+    let html = "<table>";
+    for (const key in data) {
+      html += `
+        <tr>
+          <td class="label">${key}</td>
+          <td>${data[key]}</td>
+        </tr>
+      `;
+    }
+    html += "</table>";
+    output.innerHTML = html;
+  })
+  .catch(() => {
+    output.innerHTML = "โหลดข้อมูลไม่สำเร็จ";
+  });
 </script>
-
-
-
 
 </body>
 </html>
