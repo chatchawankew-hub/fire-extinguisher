@@ -3,41 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>ทะเบียนถังดับเพลิง</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    .box {
-      border: 2px solid #333;
-      padding: 16px;
-      max-width: 400px;
-      margin: auto;
-      font-size: 18px;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="box" id="output">
-    กำลังโหลด...
-  </div>
+  <div id="output">กำลังโหลด...</div>
 
   <script>
-    // ============================
-    // ดึงค่า id จาก URL
-    // ============================
+    // STEP 1.1 อ่านค่า id จาก URL
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
+
+    // STEP 1.2 แสดงผล
     const output = document.getElementById("output");
 
     if (id) {
       output.textContent = "ID ที่ได้รับ: " + id;
     } else {
-      output.textContent = "ไม่พบ id จาก QR Code";
+      output.textContent = "ไม่พบ id";
     }
   </script>
 
