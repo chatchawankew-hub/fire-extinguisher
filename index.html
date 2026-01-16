@@ -11,7 +11,7 @@
 
   <script>
   // ================================
-  // STEP 3.1 อ่านค่า id จาก URL
+  // STEP 3.1 อ่าน id จาก URL
   // ================================
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
@@ -23,13 +23,13 @@
   }
 
   // ================================
-  // STEP 3.2 URL ของ Apps Script
+  // STEP 3.2 URL Apps Script
   // ================================
   const API_URL =
-    "https://script.google.com/macros/s/AKfycbxCpnDKl4TSHoCvQUDsDNSvHHGumEcjGGGE5-rhO-aphtBBK60muJ_nrnicmngkJkUJ/exec" + "?id=" + id;
+    "https://script.google.com/macros/s/AKfycbxCpnDKl4TSHoCvQUDsDNSvHHGumEcjGGGE5-rhO-aphtBBK60muJ_nrnicmngkJkUJ/exec?id=" + id;
 
   // ================================
-  // STEP 3.3 รายการ field ที่ต้องแสดง
+  // STEP 3.3 field ที่ต้องการแสดง
   // ================================
   const allowedFields = [
     "หมายเลขถัง",
@@ -43,20 +43,20 @@
   ];
 
   // ================================
-  // STEP 3.4 เรียก JSON
+  // STEP 3.4 เรียก API (อ่านเป็น text)
   // ================================
   fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
+    .then(res => res.text()) // 👈 สำคัญมาก
+    .then(text => {
+      const data = JSON.parse(text); // แปลงเอง
 
-      let html = "<table>";
+      let html = "<table border='1' cellpadding='8' cellspacing='0'>";
 
-      // วนเฉพาะ field ที่ต้องการ
       allowedFields.forEach(key => {
         if (data[key] !== undefined && data[key] !== "") {
           html += `
             <tr>
-              <td>${key}</td>
+              <td><strong>${key}</strong></td>
               <td>${data[key]}</td>
             </tr>
           `;
@@ -71,6 +71,7 @@
       console.error(err);
     });
 </script>
+
 
 
 
